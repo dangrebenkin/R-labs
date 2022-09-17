@@ -48,7 +48,7 @@ char_to_unicode('g')
 ```{r setup, include=FALSE}
 unicode <-
   read.csv(
-    "/mnt/80e189cd-e3ff-4d49-8470-e4842d7210a2/R_homework/UnicodeData.txt",
+    "UnicodeData.txt",
     sep = ";",
     header = F,
     stringsAsFactors = F
