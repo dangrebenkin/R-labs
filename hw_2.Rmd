@@ -1,5 +1,5 @@
 ---
-title: "hw_2_Grebenkin_21161"
+title: "hw_2"
 author: "Daniel Grebenkin"
 date: "`r Sys.Date()`"
 output: html_document
