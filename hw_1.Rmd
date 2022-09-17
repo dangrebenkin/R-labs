@@ -1,0 +1,67 @@
+---
+title: "Homework_1"
+author: "Daniel Grebenkin"
+date: "2022-09-03"
+output: pdf_document
+---
+
+Упражнение 1
+
+```{r setup, include=FALSE}
+rand <- rnorm(20)
+NAs <- rep(NA, 20)
+x <- sample(c(rand, NAs), 20)
+y <- x[!is.na(x)]
+x[x > 0] # выбираются только положительные значения вектора x. NA - пропущенный тип данных, потенциально любого типа, эти значения тоже могут быть положительным числом, поэтому они тоже возвращаются.
+```
+
+```{r setup, include=FALSE}
+y[y > 0] # у - это положительные значения вектора x, но без NA
+```
+
+```{r setup, include=FALSE}
+x[(x > 0) & (!is.na(x))] # то же самое, что и y[y > 0]
+```
+
+Упражнение 2
+
+```{r setup, include=FALSE}
+# поскольку порядок приведения базовых типов таков: logical > integer > double > character, то 
+c(1, FALSE) # integer
+c("a", 1) # character
+c(TRUE, 1L) #integer
+```
+
+Упражнение 3
+
+```{r setup, include=FALSE}
+1 == "1" # истинно, потому что 1 будет приведено в символ "1" при комбинировании типов
+-1 < FALSE # истинно, потому что комбинирование логических значений приводит FALSE к 0
+"one" < 2 # ложно, потому что 2 будет приведено в символ "2" при комбинировании типов и при сравнении 2 непустых строк будет возвращаться FALSE
+```
+
+Упражнение 4
+
+```{r setup, include=FALSE}
+ns <- seq(1,20)
+numbers <- ns*(ns+1)*1/2
+names(numbers) <- letters[1:20]
+numbers[c('a','e','o','u','i')] 
+```
+
+Упражнение 5
+
+```{r setup, include=FALSE}
+a <- 7:0
+b <- 1:7
+special_matrix <- diag(c(a, b))
+special_matrix
+```
+
+Упражнение 6
+
+```{r setup, include=FALSE}
+m1 <- rbind(rep(0, 15), diag(1, 14, 15))
+m2 <- cbind(rep(0, 15), diag(1, 15, 14))
+m1 + special_matrix + m2
+```

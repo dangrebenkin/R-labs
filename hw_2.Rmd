@@ -1,0 +1,89 @@
+---
+title: "hw_2_Grebenkin_21161"
+author: "Daniel Grebenkin"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+Упражнение 1
+
+```{r setup, include=FALSE}
+zero_to_nine <- 48:57
+upper_letters <- 65:90
+lower_letters <- 97:122
+
+unicode_to_char <- function(x) {
+  if (x %in% zero_to_nine) {
+    return (as.character(x - 48))
+  }
+  if (x %in% upper_letters) {
+    return (toupper(letters[x - 64]))
+  }
+  if (x %in% lower_letters) {
+    return (letters[x - 96])
+  }
+  "wrong symbol!"
+} 
+
+unicode_to_char(70)
+
+char_to_unicode <- function(x) {
+  if (x %in% as.character(0:9)) {
+    return (strtoi(x) + 48)
+  }
+  if (x %in% toupper(letters)) {
+    return (upper_letters[match(x, toupper(letters))])
+  }
+  if (x %in% letters) {
+    return ((lower_letters)[match (x, letters)])
+  }
+  "wrong symbol!"
+}
+
+char_to_unicode('g')
+```
+
+Упражнение 2
+
+```{r setup, include=FALSE}
+unicode <-
+  read.csv(
+    "/mnt/80e189cd-e3ff-4d49-8470-e4842d7210a2/R_homework/UnicodeData.txt",
+    sep = ";",
+    header = F,
+    stringsAsFactors = F
+  )
+unicode[13] <- strtoi(unicode[[13]], base = 16)
+
+search_upper <- function(x) {
+  id <- char_to_unicode(x)
+  upper <- unicode[id + 1, 13]
+  if (is.na(upper)) {
+    return (x)
+  }
+  else{
+    unicode_to_char(upper)
+  }
+}
+search_upper("a")
+search_upper("h")
+search_upper("t")
+```
+
+Упражнение 3
+
+```{r setup, include=FALSE}
+noise <- function (n, mean, sd)
+{
+  rnorm(n, mean, sd)
+}
+
+n_list <- seq(25, 5, by = -2)
+mapply(noise, n_list[1:10], 2, 0.2)
+```
+
+Упражнение 4
+
+```{r setup, include=FALSE}
+mapply(noise, n_list, 1:10, 0.2)
+```
