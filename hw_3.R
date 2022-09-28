@@ -1,7 +1,7 @@
 # Данные/выборка: высота и вес (https://www.kaggle.com/datasets/mustafaali96/weight-height)
 
 database <-
-  read.csv(file = "/weight-height.csv")
+  read.csv(file = "/mnt/80e189cd-e3ff-4d49-8470-e4842d7210a2/R_homework/weight-height.csv")
 X <- database$Height
 Y <- database$Weight
 
