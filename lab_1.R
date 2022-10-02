@@ -5,7 +5,7 @@
 # Данные/выборка: высота и вес (https://www.kaggle.com/datasets/mustafaali96/weight-height)
 
 database <-
-  read.csv(file = "/mnt/LinuxFiles/R_homework/weight-height.csv")
+  read.csv(file = "weight-height.csv")
 X <- database$Height
 Y <- database$Weight
 
@@ -125,7 +125,7 @@ cor(X, Y) # совпало
 
 library("readxl")
 new_database <-
-  read_excel("/mnt/LinuxFiles/R_homework/Данные_Лабораторная_1.xlsx")
+  read_excel("Данные_Лабораторная_1.xlsx")
 head(new_database)
 
 # 3. Примените критерий Манна-Уитни для выявления различий на каком-нибудь понравившимся датасете.
