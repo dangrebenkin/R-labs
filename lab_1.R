@@ -56,7 +56,7 @@ p_value_calc_Student <- function(x, y)
   return(p_value)
 }
 
-p_value_calc_Student(X, Y) # 0
+p_value_calc_Student(X, Y) # ~0 < 0.05, альтернативная гипотеза принимается, коэффициенты статистически значимы
 
 # 4. Выписать выборочное уравнение линейной регрессии Y на Х. Дать содержательную интерпретацию коэффициента регрессии.
 
@@ -72,8 +72,10 @@ standard_b0_error_value <-
   sqrt((rest_var_value * sum(X ^ 2)) / ((length(X) * sum(X ^ 2)) - (sum(X) ^ 2)))
 standard_b1_error_value <-
   sqrt(rest_var_value / sum((X - mean(X)) ^ 2))
-### Если доверительная вероятность равна 0.95, число измерений 10000, то коэффициент Стьюдента равен 1.9602
-t_coefficient <- 1.9602
+
+alpha <- 0.95
+t_coefficient <- qt((1+alpha)/2, df=length(X)-1)
+
 lower_border_beta0 <-
   b0 - (t_coefficient * standard_b0_error_value) # -354.8761
 upper_border_beta0 <-
@@ -105,12 +107,13 @@ p_value_calc_Fisher <- function(x)
   return(p_value)
 }
 
-p_value_calc_Fisher(X)
+p_value_calc_Fisher(X) # 0 < 0.05, альтернативная гипотеза принимается, уравнение адекватно
 
 # 9. Дать точечный прогноз среднего значения переменной Y при заданном значении регрессора (значение выбрать самостоятельно).
 
-x_i <- 1000
-y_i <- theoretical_Y_values_calc(x_i) # 7366.55
+x_i <- 100
+y_i <- theoretical_Y_values_calc(x_i) # 420.9916
+y_i
 
 # 10. Воспользоваться встроенными в функциями R для проверки проделанных расчетов.
 
@@ -136,14 +139,19 @@ men <- new_database[new_database$Пол == '1',]
 women <- new_database[new_database$Пол == '0',]
 X_1 <- men$Размер
 Y_1 <- women$Размер
-wilcox.test(X_1, Y_1, exact = FALSE) # 0.0001747 < 0.05, различия есть
+wilcox.test(X_1, Y_1, exact = FALSE) # 0.0001747 < 0.05, принимается альтернативная гипотеза, выборки 
+### принадлежат разным распределениям
 
 # 4*. Для критерия Манна–Уитни самостоятельно попробуйте реализовать нахождение оценки Ходжеса-Лемана
 # и доверительного интервала (Bauer) для параметра сдвига.
 # Сравните свой результат с выводом wilcox.test().
 
 median(X_1 - Y_1) # 5
-wilcox.test(X_1, Y_1, exact = FALSE, conf.int = TRUE)
+wilcox.test(X_1, Y_1, exact = FALSE, conf.int = TRUE)$estimate # совпало
+
+### Bauer ???
+
+wilcox.test(X_1, Y_1, exact = FALSE, conf.int = TRUE)$conf
 
 # 5. Примените критерий Вилкоксона для выявления различий на каком-нибудь понравившимся датасете.
 # (Например, проверьте гипотезу о том, есть ли различия между пульсом ДО и ПОСЛЕ физических упражнений
@@ -155,5 +163,5 @@ wilcox.test(pulse_before,
             pulse_after,
             paired = TRUE,
             exact = FALSE) # 2.762e-05 < 0.05, распределение не
-### симметрично
+### симметрично относительно 0, показатели больше после упражнений
 
