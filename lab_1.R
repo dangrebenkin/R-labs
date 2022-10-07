@@ -103,7 +103,7 @@ p_value_calc_Fisher <- function(x)
   f_coef <-
     (determinantion_coefficient * (length(x) - 2)) / (1 - determinantion_coefficient)
   t <- sqrt(f_coef)
-  p_value <- (2 * (1 - pt(t, df = length(x) - 2)))
+  p_value <- (2 * (1 - pf(t, df1=1, df2 = length(x) - 2)))
   return(p_value)
 }
 
