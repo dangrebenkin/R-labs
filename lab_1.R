@@ -126,20 +126,23 @@ cor(X, Y) # совпало
 # ЗАДАНИЕ 2
 # ------------------------------------------------------------------------------
 
+
 library("readxl")
 new_database <-
-  read_excel("Данные_Лабораторная_1.xlsx")
+  read_excel(
+    "Данные_Лабораторная_1.xlsx"
+  )
 head(new_database)
 
 # 3. Примените критерий Манна-Уитни для выявления различий на каком-нибудь понравившимся датасете.
 # (Например, проверьте гипотезу о том, есть ли различия между мужчинами и женщинами по Росту,
 #   (Размеру ноги) по собранным нами данным (файл с данными прикрепляю)).
 
-men <- new_database[new_database$Пол == '1',]
-women <- new_database[new_database$Пол == '0',]
+men <- new_database[new_database$Пол == '1', ]
+women <- new_database[new_database$Пол == '0', ]
 X_1 <- men$Размер
 Y_1 <- women$Размер
-wilcox.test(X_1, Y_1, exact = FALSE) # 0.0001747 < 0.05, принимается альтернативная гипотеза, выборки 
+wilcox.test(X_1, Y_1, exact = FALSE) # 0.0001747 < 0.05, принимается альтернативная гипотеза, выборки
 ### принадлежат разным распределениям
 
 # 4*. Для критерия Манна–Уитни самостоятельно попробуйте реализовать нахождение оценки Ходжеса-Лемана
@@ -149,9 +152,36 @@ wilcox.test(X_1, Y_1, exact = FALSE) # 0.0001747 < 0.05, принимается 
 median(X_1 - Y_1) # 5
 wilcox.test(X_1, Y_1, exact = FALSE, conf.int = TRUE)$estimate # совпало
 
-### Bauer ???
+# https://aakinshin.net/posts/hodges-lehmann-sen-shift-ci/
+n <- length(Y_1)
+m <- length(X_1)
+alpha <- 0.95
+mean_value <- n * m * 0.5
+variance <- n * m * (n + m + 1) / 12
+z <- qnorm((1 + alpha) / 2)
+l <- mean_value - z * sqrt(variance) - 0.5
+u <- mean_value + z * sqrt(variance) - 0.5
 
-wilcox.test(X_1, Y_1, exact = FALSE, conf.int = TRUE)$conf
+differences_list <- vector('list', (n * m))
+index <- 1
+for (next.x in X_1) {
+  for (next.y in Y_1) {
+    differences_list[index] <- next.y - next.x
+    index <- index + 1
+  }
+}
+differences_list_sorted <- sort(unlist(differences_list))
+d_l <- differences_list_sorted[round(l)]
+d_u <- differences_list_sorted[round(u)]
+
+wilcox.test(
+  Y_1,
+  X_1,
+  exact = FALSE,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  correct = FALSE
+)$conf
 
 # 5. Примените критерий Вилкоксона для выявления различий на каком-нибудь понравившимся датасете.
 # (Например, проверьте гипотезу о том, есть ли различия между пульсом ДО и ПОСЛЕ физических упражнений
@@ -164,4 +194,3 @@ wilcox.test(pulse_before,
             paired = TRUE,
             exact = FALSE) # 2.762e-05 < 0.05, распределение не
 ### симметрично относительно 0, показатели больше после упражнений
-
