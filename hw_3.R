@@ -62,7 +62,6 @@ back <- function (columns) {
       if (length(combo) > 1) {
         combo <- paste(combo, collapse = "+")
       }
-      combo
       r_squared_ajucted_value <- r_squared_ajucted(combo)
       values <- c(unlist(values), r_squared_ajucted_value)
     }
