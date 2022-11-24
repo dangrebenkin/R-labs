@@ -1,30 +1,28 @@
-# 1. Реализовать алгоритм Fisher's scoring algorithm для нахождения оценок параметров в логистической регрессии.
+# 1,2 Реализовать алгоритм Fisher's scoring algorithm для нахождения оценок параметров в логистической регрессии; 
+# Найти стандартные ошибки ("Std. Error") для этих оценок, используя их асимптотическую нормальность 
 
 fisher_scoring_algorithm <- function(X, y) {
-  p_i_calc <- function(v)
-    return(exp(v) / (1 + exp(v)))
   
-  beta_old <- matrix(rep(0, ncol(X)))
-  beta_new <- matrix(rep(1, ncol(X)))
+  beta_old <- matrix(rep(0, ncol(X))) # starting values
+  beta_new <- matrix(rep(1, ncol(X))) # estimated values
   check_change <- TRUE
   
   while (check_change == TRUE) {
-    mu <- X %*% beta_old
-    p_i <- p_i_calc(mu)
-    s_beta <- t(X) %*% (y - p_i)
-    f_beta <-  t(X) %*% diag(as.vector(p_i * (1 - p_i))) %*% X
-    beta_new <- beta_old + solve(f_beta) %*% s_beta
-    check_change <- all(abs(beta_new - beta_old) > 0.0001)
+    mu <- X %*% beta_old # linear predictor
+    p_i <- exp(mu) / (1 + exp(mu)) # logistic function
+    s_beta <- t(X) %*% (y - p_i) # score function
+    f_beta <-  t(X) %*% diag(as.vector(p_i * (1 - p_i))) %*% X # fisher matrix
+    beta_new <- beta_old + solve(f_beta) %*% s_beta 
+    check_change <- all(abs(beta_new - beta_old) > 0.0001) # check difference
     beta_old <- beta_new
   }
   covariance_matrix <- solve(f_beta)
-  standard_values <-
-    sqrt(covariance_matrix[row(covariance_matrix) == col(covariance_matrix)])
-  return(list(beta_new, standard_values))
+  standard_errors <-
+    sqrt(covariance_matrix[row(covariance_matrix) == col(covariance_matrix)]) # Std. Error
+  return(list(beta_new, standard_errors))
 }
 
-# 2, 3 Найти стандартные ошибки ("Std. Error") для этих оценок, используя их асимптотическую нормальность;
-# сравнить результаты вашего алгоритма и glm на любом понравившемся наборе данных.
+# 3 Cравнить результаты вашего алгоритма и glm на любом понравившемся наборе данных.
 
 dataset <- mtcars
 head(dataset)
